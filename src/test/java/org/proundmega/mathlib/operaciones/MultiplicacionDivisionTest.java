@@ -66,4 +66,12 @@ public class MultiplicacionDivisionTest {
         
         multiplicarYAssert(prueba, esperado);
     }
+    
+    @Test
+    public void operacionQueNoTieneMultiplicacion() {
+        String prueba = "3.1";
+        double esperado = 3.1;
+        
+        multiplicarYAssert(prueba, esperado);
+    }
 }

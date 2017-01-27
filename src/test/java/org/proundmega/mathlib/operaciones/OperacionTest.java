@@ -1,6 +1,5 @@
 package org.proundmega.mathlib.operaciones;
 
-import org.proundmega.mathlib.operaciones.Operacion;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -19,6 +18,33 @@ public class OperacionTest {
     public void sumarVariosNumeros() {
         String prueba = "10-9+7-5.2";
         double respuesta = 2.8;
+        
+        Operacion operacion = new Operacion(prueba);
+        assertEquals(respuesta, operacion.getResultado(), 0.001);
+    }
+    
+    @Test
+    public void sumar2Multiplicaciones() {
+        String prueba = "3.2*4.9+1.1*6.9";
+        double respuesta = 23.27;
+        
+        Operacion operacion = new Operacion(prueba);
+        assertEquals(respuesta, operacion.getResultado(), 0.001);
+    }
+    
+    @Test
+    public void juntandoSumasRestasMultiplicacionesYDivisiones1() {
+        String prueba = "1+2*3.19-7/-3.09+14.298*877-2+381";
+        double respuesta = 12927.99137;
+        
+        Operacion operacion = new Operacion(prueba);
+        assertEquals(respuesta, operacion.getResultado(), 0.001);
+    }
+    
+    @Test
+    public void juntandoSumasRestasMultiplicacionesYDivisiones2() {
+        String prueba = "-2*4*-1/729+431.9876621/+09/-1.012*139.24";
+        double respuesta = -6604.069183;
         
         Operacion operacion = new Operacion(prueba);
         assertEquals(respuesta, operacion.getResultado(), 0.001);

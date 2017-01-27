@@ -25,6 +25,6 @@ public class Operacion {
     }
     
     private double operarElemento(String valor) {
-        return Double.parseDouble(valor);
+        return new MultiplicacionDivision(valor).operar();
     }
 }
