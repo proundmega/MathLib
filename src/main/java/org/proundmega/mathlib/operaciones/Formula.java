@@ -1,8 +1,6 @@
 package org.proundmega.mathlib.operaciones;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Formula {
     private String formula;
@@ -48,7 +46,8 @@ public class Formula {
             .replace("++", "+")
             .replace("+-", "-")
             .replace("-+", "-")
-            .replace("--", "+"));
+            .replace("--", "+")
+        );
     }
 
     @Override
