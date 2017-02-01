@@ -49,4 +49,49 @@ public class OperacionTest {
         Operacion operacion = new Operacion(prueba);
         assertEquals(respuesta, operacion.getResultado(), 0.001);
     }
+    
+    @Test
+    public void operarParentesisSencillo() {
+        String formula = "(2+3)";
+        double respuesta = 5.0;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
+    
+    @Test
+    public void operarParentesisSencilloConOperandos() {
+        String formula = "(5*6-5)+7";
+        double respuesta = 32.0;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
+    
+    @Test
+    public void operarParentesisSencilloConOperandos2() {
+        String formula = "42*(2/7+6*12-3)*6/2";
+        double respuesta = 8730.0;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
+    
+    @Test
+    public void operarParentesisVariosInternos() {
+        String formula = "(2*3)+(4-5)";
+        double respuesta = 5.0;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
+    
+    @Test
+    public void operarParentesisVariosInternos2() {
+        String formula = "4*(32-5)+4-1*(2-1)+2/(4*2)";
+        double respuesta = 111.25;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
 }

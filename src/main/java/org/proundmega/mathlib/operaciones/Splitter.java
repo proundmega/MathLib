@@ -2,8 +2,10 @@ package org.proundmega.mathlib.operaciones;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /** Esta clase hace el split de la cadena enviada y la separa en pequeñas cadenas
  *  operables. La idea es trabajar cada elemento por separado y no junto.
@@ -21,39 +23,51 @@ public class Splitter {
         this.formula = formula;
     }
     
-    public List<String> getSplits() {
-        List<String> lista = splitPorCadaSigno();
+    public List<Formula> getSplits() {
+        List<SplitHelper> lista = splitPorCadaSigno();
         removerCadenasVacias(lista);
         juntarOperandosSeparados(lista);
+        juntarParentesisSeparados(lista);
         
-        return lista;
+        return lista.stream()
+                .map(helper -> new Formula(helper.getFragmentoFormula()))
+                .collect(Collectors.toList());
     }
 
-    private List<String> splitPorCadaSigno() {
-        List<String> lista = new ArrayList<>();
+    private List<SplitHelper> splitPorCadaSigno() {
+        List<SplitHelper> lista = new ArrayList<>();
         Matcher matcher = pattern.matcher(formula);
         
         int actual = 0;
         while(matcher.find()) {
             int start = matcher.start();
-            lista.add(formula.substring(actual, start));
+            lista.add(new SplitHelper(formula.substring(actual, start)));
             actual = start;
         }
         
-        lista.add(formula.substring(actual));
+        lista.add(new SplitHelper(formula.substring(actual)));
         return lista;
     }
     
-    private void juntarOperandosSeparados(List<String> lista) {
-        for(int i = 0; i < lista.size(); i++) {
-            String actual = lista.get(i);
-            if(contieneOperandosAlFinal(actual)) {
-                String valorPrevio = lista.get(i + 1);
+    private void removerCadenasVacias(List<SplitHelper> lista) {
+        lista.removeIf(cadena -> cadena.getFragmentoFormula().isEmpty());
+    }
+    
+    private void juntarOperandosSeparados(List<SplitHelper> lista) {
+        juntarSi(actual -> actual.contieneOperandosAlFinal(), lista);
+    }
+    
+    private void juntarSi(Predicate<SplitHelper> predicado, List<SplitHelper> lista) {
+        for(int i = 0; i < lista.size() - 1; i++) {
+            SplitHelper actual = lista.get(i);
+            
+            if(predicado.test(actual)) {
+                SplitHelper valorPrevio = lista.get(i + 1);
                 
                 lista.remove(i + 1);
                 lista.remove(i);
                 
-                lista.add(i, actual + valorPrevio);
+                lista.add(i, new SplitHelper(actual, valorPrevio));
                 
                 // Es para revisar el mismo valor y ver que no haya mas cadenas
                 i--;
@@ -61,12 +75,8 @@ public class Splitter {
         }
     }
 
-    private static boolean contieneOperandosAlFinal(String actual) {
-        String ultimoCaracter = actual.length() < 1 ? actual : actual.substring(actual.length() - 1);
-        return ultimoCaracter.equals("*") || ultimoCaracter.equals("/");
+    private void juntarParentesisSeparados(List<SplitHelper> lista) {
+        juntarSi(actual -> !actual.hayParentesisCompletados(), lista);
     }
     
-    private void removerCadenasVacias(List<String> lista) {
-        lista.removeIf(cadena -> cadena.isEmpty());
-    }
 }

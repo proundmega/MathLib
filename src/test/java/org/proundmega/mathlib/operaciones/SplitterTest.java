@@ -2,6 +2,7 @@ package org.proundmega.mathlib.operaciones;
 
 import org.proundmega.mathlib.operaciones.Splitter;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,7 +19,10 @@ public class SplitterTest {
     
     private List<String> crearListaValores(String prueba) {
         Splitter splitter = new Splitter(prueba);
-        return splitter.getSplits();
+        return splitter.getSplits()
+                .stream()
+                .map(formula -> formula.getFormula())
+                .collect(Collectors.toList());
     }
     
     @Test
@@ -88,5 +92,30 @@ public class SplitterTest {
         assertEquals("-3*+5", splits.get(1));
         assertEquals("-4*2", splits.get(2));
         assertEquals("-1/-2*+4", splits.get(3));
+    }
+    
+    @Test
+    public void noSeHaceSplitDeParentesisCuandoSeMultiplica() {
+        List<String> splits = crearListaValores("(2+3)*5");
+        
+        assertEquals(1, splits.size());
+        assertEquals("(2+3)*5", splits.get(0));
+    }
+    
+    @Test
+    public void splitParentesisCorrecto() {
+        List<String> splits = crearListaValores("(3+4)-45*6");
+        
+        assertEquals(2, splits.size());
+        assertEquals("(3+4)", splits.get(0));
+        assertEquals("-45*6", splits.get(1));
+    }
+    
+    @Test
+    public void sinSplitCuandoTodaLaFormulaEsParentesis() {
+        List<String> splits = crearListaValores("(8+3-5-2.0)");
+        
+        assertEquals(1, splits.size());
+        assertEquals("(8+3-5-2.0)", splits.get(0));
     }
 }

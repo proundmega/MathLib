@@ -15,16 +15,26 @@ public class Operacion {
     
     public double getResultado() {
         Splitter splitter = new Splitter(operacion);
-        List<String> valores = splitter.getSplits();
+        List<Formula> valores = splitter.getSplits();
         
         double suma = 0;
-        for (String valor : valores) {
+        for (Formula valor : valores) {
             suma += operarElemento(valor);
         }
         return suma;
     }
     
-    private double operarElemento(String valor) {
-        return new MultiplicacionDivision(valor).operar();
+    private double operarElemento(Formula valor) {
+        while (valor.contieneParentesis()) {
+            Fragmento fragmentoParentesis = valor.getBloqueParentesisMasInterno();
+            double resultadoInterno = new Operacion(fragmentoParentesis.getFormulaEnBloque().getFormula()).getResultado();
+            Fragmento fragmentoRespuesta = fragmentoParentesis.reemplazarFormulaPorValor(resultadoInterno);
+            
+            valor = valor.reemplazarFragmento(fragmentoRespuesta);
+        }
+        
+        valor = valor.compactarSignos();
+        return new MultiplicacionDivision(valor.getFormula()).operar();
     }
+    
 }
