@@ -19,7 +19,7 @@ public class Formula {
 
     public Fragmento getBloqueParentesisMasInterno() {
         int parentesisIzquierdo = getIndiceParentesisIzquierdoMasProfundo();
-        int parentesisDerecho = getIndiceParentesisDerechoMasProfundo();
+        int parentesisDerecho = getIndiceParentesisDerechoMasProfundo(parentesisIzquierdo);
         String subFormula = formula.substring(parentesisIzquierdo + 1, parentesisDerecho - 1);
         
         return new Fragmento(subFormula, parentesisIzquierdo, parentesisDerecho);
@@ -29,8 +29,8 @@ public class Formula {
         return formula.lastIndexOf("(");
     }
     
-    private int getIndiceParentesisDerechoMasProfundo() {
-        return formula.indexOf(")") + 1;
+    private int getIndiceParentesisDerechoMasProfundo(int parentesisIzquierdo) {
+        return formula.indexOf(")", parentesisIzquierdo) + 1;
     }
 
     public Formula reemplazarFragmento(Fragmento nuevoFragmento) {

@@ -94,4 +94,40 @@ public class OperacionTest {
         Operacion operacion = new Operacion(formula);
         assertEquals(respuesta, operacion.getResultado(), 0.01);
     }
+    
+    @Test
+    public void operarParentesisAnidados() {
+        String formula = "3*((5*3))";
+        double respuesta = 45.0;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
+    
+    @Test
+    public void operarParentesisAnidados2() {
+        String formula = "2-3*(1-(7+3)*4)/5";
+        double respuesta = 25.4;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
+    
+    @Test
+    public void operarParentesisAnidados3() {
+        String formula = "(24*(3.5/6-(7/29)+(2-(1)))-9)-9";
+        double respuesta = 14.2068;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
+    
+    @Test
+    public void operarParentesisAnidados4() {
+        String formula = "3-(3*4-(1-2)-(3-2))+(4-2)";
+        double respuesta = -7;
+        
+        Operacion operacion = new Operacion(formula);
+        assertEquals(respuesta, operacion.getResultado(), 0.01);
+    }
 }

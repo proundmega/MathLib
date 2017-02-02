@@ -2,7 +2,16 @@ package org.proundmega.mathlib.operaciones;
 
 import java.util.List;
 
-/** Esta clase se encarga de tomar un String y operarlo
+/** Esta clase se encarga de tomar un String y operarlo.
+ *  Actualmente tiene soporte completo para multiplicaciones y divisiones, asi como
+ *  operaciones con parentesis sin problemas.
+ * 
+ *  Ademas las operaciones deben tener la semantica apropiada, es decir que por el momento
+ *  no se validan los inputs erroneos como por ejemplo operandos incompletos y cosas asi.
+ * 
+ *  Las formulas son como las que se encuentran en matematicas, tipo:
+ * 
+ *  2*3-9+(4/7)
  *
  * @author proundmega
  */
@@ -31,6 +40,7 @@ public class Operacion {
             Fragmento fragmentoRespuesta = fragmentoParentesis.reemplazarFormulaPorValor(resultadoInterno);
             
             valor = valor.reemplazarFragmento(fragmentoRespuesta);
+            valor = valor.compactarSignos();
         }
         
         valor = valor.compactarSignos();
